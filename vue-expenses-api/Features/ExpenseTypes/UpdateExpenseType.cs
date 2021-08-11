@@ -58,8 +58,8 @@ namespace vue_expenses_api.Features.ExpenseTypes
                 CancellationToken cancellationToken)
             {
                 var user = await _context.Users.SingleAsync(x => x.Email == _currentUser.EmailId);
-                
-                if (await _context.ExpenseCategories.AnyAsync(
+
+                if (await _context.ExpenseTypes.AnyAsync(
                     x => x.Name == request.Name && x.User == user && x.Id != request.Id,
                     cancellationToken))
                 {

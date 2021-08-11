@@ -30,7 +30,7 @@ namespace vue_expenses_api.Infrastructure
                 };
 
                 await context.Users.AddAsync(user);
-                
+                /*
                 var expenseCategories = new List<ExpenseCategory>
                 {
                     new ExpenseCategory(
@@ -133,7 +133,7 @@ namespace vue_expenses_api.Infrastructure
                             expense1,
                             expense2);
                     }
-                }
+                } */
 
                 await context.SaveChangesAsync();
             }

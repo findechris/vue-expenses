@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using vue_expenses_api.Dtos;
 
@@ -25,7 +26,7 @@ namespace vue_expenses_api.Features.Expenses
         {
             return await _mediator.Send(new ExpenseList.Query());
         }
-        
+
         [HttpGet]
         [Route("getbyyear/{year}")]
         public async Task<List<ExpenseDto>> GetByYear(int year)
@@ -45,6 +46,14 @@ namespace vue_expenses_api.Features.Expenses
             [FromBody] CreateExpense.Command command)
         {
             return await _mediator.Send(command);
+        }
+
+        [HttpPost]
+        [Route("import")]
+        public async Task Import(
+            IList<IFormFile> file)
+        {
+            await _mediator.Send(new ImportExpense.Command(file));
         }
 
         [HttpPut("{id}")]

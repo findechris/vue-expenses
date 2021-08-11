@@ -1,66 +1,101 @@
 {
-  "name": "vue-expenses-client",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
-  },
-  "dependencies": {
-    "axios": "^0.21.1",
-    "core-js": "^3.15.2",
-    "echarts": "^4.9.0",
-    "lodash": "^4.17.21",
-    "secure-ls": "^1.2.6",
-    "vue": "^2.6.14",
-    "vue-echarts": "^4.1.0",
-    "vue-router": "^3.5.2",
-    "vuetify": "^2.5.6",
-    "vuex": "^3.6.2",
-    "vuex-persistedstate": "^4.0.0-beta.3"
-  },
-  "devDependencies": {
-    "@vue/cli-plugin-babel": "^4.5.13",
-    "@vue/cli-plugin-eslint": "^4.5.13",
-    "@vue/cli-plugin-router": "^4.5.13",
-    "@vue/cli-plugin-vuex": "^4.5.13",
-    "@vue/cli-service": "^4.5.13",
-    "babel-eslint": "^10.1.0",
-    "eslint": "^5.16.0",
-    "eslint-plugin-vue": "^5.0.0",
-    "http-proxy": ">=1.18.1",
-    "node-forge": ">=0.10.0",
-    "node-sass": "^4.14.1",
-    "sass": "^1.35.2",
-    "sass-loader": "^8.0.2",
-    "serialize-javascript": "^3.1.0",
-    "vue-cli-plugin-vuetify": "^1.1.2",
-    "vue-template-compiler": "^2.6.14",
-    "vuetify-loader": "^1.7.2"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
+    "name": "vue-expenses-client",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "serve": "vue-cli-service serve",
+        "build": "vue-cli-service build",
+        "lint": "vue-cli-service lint"
     },
-    "extends": [
-      "plugin:vue/essential"
-    ],
-    "rules": {
-      "no-console": "off"
+    "dependencies": {
+        "@vue/composition-api": "^1.1.0",
+        "axios": "^0.21.1",
+        "core-js": "^3.16.1",
+        "deepmerge": "^4.2.2",
+        "echarts": "^5.1.2",
+        "lodash": "^4.17.21",
+        "secure-ls": "^1.2.6",
+        "vue": "^2.6.14",
+        "vue-echarts": "^6.0.0",
+        "vue-router": "^3.5.2",
+        "vuetify": "^2.5.8",
+        "vuex": "^3.6.2",
+        "vuex-persistedstate": "^4.0.0"
     },
-    "parserOptions": {
-      "parser": "babel-eslint"
-    }
-  },
-  "postcss": {
-    "plugins": {
-      "autoprefixer": {}
-    }
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions"
-  ]
+    "devDependencies": {
+        "@typescript-eslint/eslint-plugin": "^4.29.1",
+        "@typescript-eslint/parser": "^4.29.1",
+        "@vue/cli-plugin-babel": "^4.5.13",
+        "@vue/cli-plugin-eslint": "^4.5.13",
+        "@vue/cli-plugin-router": "^4.5.13",
+        "@vue/cli-plugin-typescript": "^4.5.13",
+        "@vue/cli-plugin-vuex": "^4.5.13",
+        "@vue/cli-service": "^4.5.13",
+        "@vue/eslint-config-typescript": "^7.0.0",
+        "babel-eslint": "^10.1.0",
+        "eslint": "^7.32.0",
+        "eslint-config-prettier": "^8.3.0",
+        "eslint-plugin-prettier": "^3.4.0",
+        "eslint-plugin-vue": "^7.16.0",
+        "http-proxy": ">=1.18.1",
+        "node-forge": ">=0.10.0",
+        "node-sass": "^6.0.1",
+        "prettier": "^2.3.2",
+        "sass": "~1.32",
+        "sass-loader": "^10",
+        "serialize-javascript": "^6.0.0",
+        "typescript": "^4.3.5",
+        "vue-cli-plugin-vuetify": "^2.4.2",
+        "vue-template-compiler": "^2.6.14",
+        "vuetify-loader": "^1.7.2"
+    },
+    "eslintConfig": {
+        "root": true,
+        "env": {
+            "node": true
+        },
+        "extends": [
+            "plugin:vue/essential",
+            "@vue/typescript/recommended",
+            "plugin:prettier/recommended"
+        ],
+        "plugins": [
+            "prettier"
+        ],
+        "rules": {
+            "no-console": "off",
+            "prettier/prettier": [
+                "warn",
+                {
+                    "singleQuote": true,
+                    "semi": false,
+                    "trailingComma": "none"
+                }
+            ],
+            "quotes": [
+                "error",
+                "single"
+            ],
+            "vue/valid-v-slot": "off",
+            "vue/no-mutating-props": "off",
+            "@typescript-eslint/explicit-module-boundary-types": "off"
+        },
+        "parserOptions": {
+            "parser": "@typescript-eslint/parser"
+        }
+    },
+    "prettier": {
+        "singleQuote": true,
+        "semi": false,
+        "trailingComma": "none"
+    },
+    "postcss": {
+        "plugins": {
+            "autoprefixer": {}
+        }
+    },
+    "browserslist": [
+        "> 1%",
+        "last 2 versions"
+    ]
 }

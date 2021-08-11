@@ -1,16 +1,18 @@
-FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build-env
+# syntax=docker/dockerfile:1
+FROM mcr.microsoft.com/dotnet/sdk:5.0-focal AS build-env
 WORKDIR /app
 
-ENV PATH="$PATH:$HOME/.dotnet/tools/"
-
-# Copy csproj 
+# Copy csproj and restore as distinct layers
 COPY *.csproj ./
 RUN dotnet restore
 
-# Copy everything build
+# Copy everything else and build
 COPY . ./
-RUN dotnet publish -c Release -o .
+RUN dotnet publish -c Release -o out
 
-# Heroku doesnt like ENTRYPOINT
-# ENTRYPOINT ["dotnet", "vue-expenses-api.dll"]
-CMD ASPNETCORE_URLS=http://*:$PORT dotnet vue-expenses-api.dll
+# Build runtime image
+FROM mcr.microsoft.com/dotnet/aspnet:5.0-focal
+WORKDIR /app
+COPY --from=build-env /app/out .
+ENTRYPOINT ["dotnet", "vue-expenses-api.dll"]
+# CMD ASPNETCORE_URLS=http://*:$PORT dotnet vue-expenses-api.dll

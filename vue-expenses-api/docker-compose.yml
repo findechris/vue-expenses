@@ -1,0 +1,15 @@
+version: '3'
+services:
+    vue_expenses_api:
+        #image: "mcr.microsoft.com/dotnet/core/sdk:2.2"
+        #network_mode: host
+        #external_links:
+        # - "pg_db_1"
+        build: .
+        volumes:
+            - ./db:/app/db
+        environment:
+            - 'ConnectionStrings:DefaultConnection=Data Source=db/expenses.db'
+        ports:
+            - 5000:80
+        command: ['dotnet', 'ef', 'database update']
