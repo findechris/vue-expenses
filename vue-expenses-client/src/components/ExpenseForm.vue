@@ -1,4 +1,3 @@
-/* eslint-disable vue/no-mutating-props */
 <template>
     <v-form class="mt-1" ref="expenseform">
         <v-container>
@@ -84,8 +83,8 @@
                     :loading="loading"
                     @click="
                         () => {
-                            if (!this.$refs.expenseform.validate()) return
-                            onSubmitClick()
+                            if (!this.validate()) return
+                            onSubmitClickMethod()
                         }
                     "
                     >Submit</v-btn
@@ -103,11 +102,12 @@
     </v-form>
 </template>
 
-<script>
+<script lang="ts">
 import { mapState } from 'vuex'
-import validations from '@/helpers/validations'
+import validations from '../helpers/validations'
+import { ref, defineComponent } from '@vue/composition-api'
 
-export default {
+export default defineComponent({
     props: {
         expense: {
             type: Object
@@ -137,11 +137,23 @@ export default {
         ...mapState('expenseTypes', ['types'])
     },
     methods: {
+        onSubmitClickMethod() {
+            this.$props.onSubmitClick()
+        },
+        validate() {
+            return this.$refs.expenseform.validate()
+        },
         reset() {
             this.$refs.expenseform.reset()
         }
+    },
+    setup() {
+        const expenseform = ref(null)
+        return {
+            expenseform
+        }
     }
-}
+})
 </script>
 
 <style></style>

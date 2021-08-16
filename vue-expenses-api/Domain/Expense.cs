@@ -43,6 +43,6 @@ namespace vue_expenses_api.Domain
         public string Reference { get; set; }
         public string PaymentMethod { get; set; }
         public User User { get; set; }
-        public List<ExpenseType> PaidFor { get; set; }
+        public List<ExpensePaidFor> PaidFor { get; set; }
     }
 }

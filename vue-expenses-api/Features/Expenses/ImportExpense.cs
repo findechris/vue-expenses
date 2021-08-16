@@ -97,19 +97,24 @@ namespace vue_expenses_api.Features.Expenses
                 });
                 Map(m => m.PaidFor).Optional().Convert(row =>
                 {
-                    var fieldVal = row.Row.GetField("PayedFor");
+                    var fieldVal = row.Row.GetField("PaidFor");
+                    var amt = row.Row.GetField("Amt");
+                    var amtD = Decimal.Parse(amt);
                     if (fieldVal == null)
                     {
-                        fieldVal = "Bea,Chris";
+                        fieldVal = "Bea:Chris";
                     }
-                    var splited = fieldVal.Split(',');
-                    var pList = new List<Domain.ExpenseType>();
+                    var splited = fieldVal.Split(':');
+                    var pList = new List<Domain.ExpensePaidFor>();
                     foreach (var split in splited)
                     {
                         var et = context.ExpenseTypes.FirstOrDefault(m => m.Name == split);
+                        var pfor = new ExpensePaidFor();
+                        pfor.ExpenseType = et;
+                        pfor.Value = (amtD / splited.Length);
                         if (et != null)
                         {
-                            pList.Add(et);
+                            pList.Add(pfor);
                         }
                     }
                     return pList;

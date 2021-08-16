@@ -8,7 +8,6 @@ import Expenses from '@/views/Expenses.vue'
 import Stats from '@/views/Stats.vue'
 import Settings from '@/views/Settings.vue'
 import Profile from '@/views/Profile.vue'
-import Import from '@/views/Import.vue'
 import store from '@/store/index'
 
 Vue.use(Router)
@@ -26,7 +25,6 @@ const router = new Router({
                 { path: '/stats', component: Stats },
                 { path: '/settings', component: Settings },
                 { path: '/profile', component: Profile },
-                { path: '/import', component: Import },
                 { path: '/', component: Dashboard }
             ]
         },

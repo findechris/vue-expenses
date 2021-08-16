@@ -76,7 +76,12 @@
                 "error",
                 "single"
             ],
-            "vue/valid-v-slot": "off",
+            "vue/valid-v-slot": [
+                "error",
+                {
+                    "allowModifiers": true
+                }
+            ],
             "vue/no-mutating-props": "off",
             "@typescript-eslint/explicit-module-boundary-types": "off"
         },

@@ -23,5 +23,6 @@ namespace vue_expenses_api.Domain
         public string Description { get; set; }
         public User User { get; set; }
         public List<Expense> Expenses { get; set; }
+        public List<ExpensePaidFor> PaidFor { get; set; }
     }
 }

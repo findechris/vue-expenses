@@ -3,9 +3,11 @@ using System.Data;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Dapper;
 using MediatR;
 using vue_expenses_api.Dtos;
+using vue_expenses_api.Infrastructure;
 using vue_expenses_api.Infrastructure.Security;
 
 namespace vue_expenses_api.Features.Expenses
@@ -26,14 +28,18 @@ namespace vue_expenses_api.Features.Expenses
         public class QueryHandler : IRequestHandler<Query, List<ExpenseDto>>
         {
             private readonly IDbConnection _dbConnection;
+            private readonly ExpensesContext _context;
             private readonly ICurrentUser _currentUser;
 
             public QueryHandler(
+                ExpensesContext db,
                 IDbConnection connection,
-                ICurrentUser currentUser)
+                ICurrentUser currentUser
+                )
             {
                 _dbConnection = connection;
                 _currentUser = currentUser;
+                _context = db;
             }
 
             //Implement Paging
@@ -68,15 +74,29 @@ namespace vue_expenses_api.Features.Expenses
                                 u.Email=@userEmailId 
                                 AND e.Archived = 0
                                 {yearCriteria}";
-
                 var expenses = await _dbConnection.QueryAsync<ExpenseDto>(
                     sql,
                     new
                     {
                         userEmailId = _currentUser.EmailId
-                    });
-
-                return expenses.ToList();
+                    }
+                );
+                var exList = expenses.ToList();
+                foreach (var expense in exList)
+                {
+                    var ex = await _context.Expenses.Include("PaidFor.ExpenseType").FirstOrDefaultAsync(m => m.Id == expense.Id, cancellationToken);
+                    var pf = ex.PaidFor.ToList();
+                    if (pf.Count > 0)
+                    {
+                        expense.PaidFor = pf.Select(m =>
+                        {
+                            var etd = new ExpenseTypeDto(m.Id, m.ExpenseType.Name, m.ExpenseType.Description);
+                            etd.Value = m.Value;
+                            return etd;
+                        }).ToList();
+                    }
+                }
+                return exList;
             }
         }
     }

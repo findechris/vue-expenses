@@ -1,6 +1,6 @@
 ﻿namespace vue_expenses_api.Dtos
 {
-    public class ExpenseTypeDto 
+    public class ExpenseTypeDto
     {
         protected ExpenseTypeDto()
         {
@@ -18,6 +18,7 @@
 
         public int Id { get; set; }
         public string Name { get; set; }
+        public decimal Value { get; set; }
         public string Description { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace vue_expenses_api.Dtos
 {
@@ -42,6 +43,9 @@ namespace vue_expenses_api.Dtos
         public int TypeId { get; set; }
         public decimal Value { get; set; }
         public string Comments { get; set; }
+        public string Reference { get; set; }
+        public List<ExpenseTypeDto> PaidFor { get; set; }
+        public string PaymentMethod { get; set; }
         public int Month { get; set; }
     }
 }

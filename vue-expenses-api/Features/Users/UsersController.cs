@@ -50,13 +50,20 @@ namespace vue_expenses_api.Features.Users
             return await _mediator.Send(command);
         }
 
-        
+
         [HttpPut("profile")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ProfileDetailsDto> Profile(
             [FromBody] UpdateProfile.Command command)
         {
             return await _mediator.Send(command);
+        }
+
+        [HttpGet("users")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<List<UserDto>> Get()
+        {
+            return await _mediator.Send(new UsersList.Query());
         }
 
         [HttpGet("currencies")]

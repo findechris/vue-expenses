@@ -30,11 +30,11 @@ namespace vue_expenses_api.Infrastructure
                 };
 
                 await context.Users.AddAsync(user);
-                /*
-                var expenseCategories = new List<ExpenseCategory>
+
+                /*var expenseCategories = new List<ExpenseCategory>
                 {
                     new ExpenseCategory(
-                        "General Expenses",
+                        "",
                         string.Empty,
                         2000m,
                         "#CE93D8",
@@ -60,29 +60,25 @@ namespace vue_expenses_api.Infrastructure
                 };
 
                 await context.ExpenseCategories.AddRangeAsync(expenseCategories);
-
+                */
                 var expenseTypes = new List<ExpenseType>
                 {
                     new ExpenseType(
-                        "Credit Card",
+                        "1822",
                         string.Empty,
                         user),
                     new ExpenseType(
-                        "Debit Card",
+                        "Bea",
                         string.Empty,
                         user),
                     new ExpenseType(
-                        "Cheque",
+                        "Chris",
                         string.Empty,
                         user),
-                    new ExpenseType(
-                        "Cash",
-                        string.Empty,
-                        user)
                 };
 
                 await context.ExpenseTypes.AddRangeAsync(expenseTypes);
-
+                /*
                 var r = new Random();
                 //create expenses for a few years
                 for (var i = 1; i <= 12; i++)

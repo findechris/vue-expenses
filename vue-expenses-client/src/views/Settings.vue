@@ -65,6 +65,7 @@
                                         </v-row>
                                     </v-container>
                                 </v-form>
+                                <ExpenseImport />
                             </v-card>
                         </v-flex>
                         <v-flex xs12 md8 my-3>
@@ -100,6 +101,23 @@
                         </v-layout>
                     </v-container>
                 </v-flex>
+
+                <v-flex xs12>
+                    <v-container px-0 pb-0>
+                        <v-layout row justify-space-between>
+                            <v-flex xs12>
+                                <v-card
+                                    class="pa-2 mr-2 my-3"
+                                    flat
+                                    min-height="340px"
+                                    height="100%"
+                                >
+                                    <User />
+                                </v-card>
+                            </v-flex>
+                        </v-layout>
+                    </v-container>
+                </v-flex>
             </v-layout>
         </v-container>
     </div>
@@ -107,14 +125,18 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import { EDIT_USER_SETTINGS } from '@/store/_actiontypes'
+import { EDIT_USER_SETTINGS } from '../store/_actiontypes'
 import ExpenseCategories from '@/components/ExpenseCategories'
 import ExpenseTypes from '@/components/ExpenseTypes'
+import ExpenseImport from '@/components/ExpenseImport'
+import User from '@/components/User'
 
 export default {
     components: {
         ExpenseCategories,
-        ExpenseTypes
+        ExpenseTypes,
+        ExpenseImport,
+        User
     },
     computed: {
         ...mapState({

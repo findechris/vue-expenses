@@ -24,13 +24,15 @@ import {
     LOAD_CATEGORIES_BREAKDOWN,
     LOAD_EXPENSES_BREAKDOWN,
     LOAD_EXPENSES,
+    LOAD_USERS,
     LOAD_CURRENCIES
-} from '@/store/_actiontypes'
+} from '../store/_actiontypes'
 export default {
     components: {
         Navbar
     },
     mounted() {
+        this.$store.dispatch(`users/${LOAD_USERS}`)
         this.$store.dispatch(`expenseTypes/${LOAD_EXPENSE_TYPES}`)
         this.$store.dispatch(`expenseCategories/${LOAD_CATEGORIES}`)
         this.$store.dispatch(`statistics/${LOAD_CATEGORIES_BREAKDOWN}`)

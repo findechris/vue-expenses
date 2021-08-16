@@ -76,16 +76,17 @@
         </v-container>
     </div>
 </template>
-<script>
+<script lang="ts">
 import { mapState, mapActions } from 'vuex'
 import {
     CREATE_EXPENSE,
     EDIT_EXPENSE,
     REMOVE_EXPENSE
 } from '@/store/_actiontypes'
-import ExpenseForm from '@/components/ExpenseForm'
+import ExpenseForm from '../components/ExpenseForm.vue'
+import { defineComponent } from '@vue/composition-api'
 
-export default {
+export default defineComponent({
     components: { ExpenseForm },
     data: () => ({
         loading: false,
@@ -120,8 +121,8 @@ export default {
     }),
     computed: {
         ...mapState({
-            expenses: (state) => state.expenses.expenses,
-            user: (state) => state.account.user
+            expenses: (state: any) => state.expenses.expenses,
+            user: (state: any) => state.account.user
         }),
 
         formTitle() {
@@ -182,7 +183,7 @@ export default {
             }
         }
     }
-}
+})
 </script>
 
 <style></style>
