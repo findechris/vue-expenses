@@ -47,6 +47,7 @@ namespace vue_expenses_api.Features.Statistics
                             INNER JOIN	
                                 Expenses e ON ec.Id = e.CategoryId 
                                     AND e.Archived = 0
+                                    AND e.PaymentType = 0
                                     AND (SELECT Id FROM ExpenseTypes WHERE Id = e.TypeId AND Archived = 0) = e.TypeId                                
                             INNER JOIN
                                 Users u ON u.Id = ec.UserId

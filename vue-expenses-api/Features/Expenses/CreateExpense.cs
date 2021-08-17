@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
@@ -83,6 +84,30 @@ namespace vue_expenses_api.Features.Expenses
                     request.Value,
                     request.Comments,
                     user);
+                expense.PaymentMethod = "Cash";
+                expense.PaymentType = PaymentTypes.Expense;
+                expense.Reference = expenseType.Name;
+
+                // PaidFor ToDo
+                var fieldVal = "";
+                if (fieldVal == "")
+                {
+                    fieldVal = "Bea:Chris";
+                }
+                var splited = fieldVal.Split(':');
+                var pList = new List<Domain.ExpensePaidFor>();
+                foreach (var split in splited)
+                {
+                    var et = await _context.ExpenseTypes.SingleOrDefaultAsync(m => m.Name == split);
+                    var pfor = new ExpensePaidFor();
+                    pfor.ExpenseType = et;
+                    pfor.Value = (expense.Value / splited.Length);
+                    if (et != null)
+                    {
+                        pList.Add(pfor);
+                    }
+                }
+                expense.PaidFor = pList;
 
                 await _context.Expenses.AddAsync(
                     expense,

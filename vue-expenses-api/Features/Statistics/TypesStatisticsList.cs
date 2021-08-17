@@ -46,7 +46,7 @@ namespace vue_expenses_api.Features.Statistics
                 var monthConstraint = request.Month.HasValue
                     ? $" AND CAST (STRFTIME('%m', e.Date) AS INT) = {request.Month.Value} "
                     : string.Empty;
-                
+
                 var sql = $@"SELECT 
 	                            et.Id AS Id,
 	                            et.Name AS Name,
@@ -60,6 +60,7 @@ namespace vue_expenses_api.Features.Statistics
 					                    AND STRFTIME('%Y', e.Date) = '{request.Year}' 
 					                    {monthConstraint}
                                         AND e.Archived = 0
+                                        AND e.PaymentType = 0
                                         AND (SELECT Id FROM ExpenseCategories WHERE Id = e.CategoryId AND Archived = 0) = e.CategoryId
                             WHERE	
                                 u.Email = @userEmailId

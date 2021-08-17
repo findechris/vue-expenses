@@ -61,6 +61,7 @@ namespace vue_expenses_api.Features.Statistics
 							LEFT JOIN	
 								Expenses e ON ec.Id = e.CategoryId 
 									AND e.Archived = 0
+									AND e.PaymentType = 0
 									AND STRFTIME('%Y', e.Date) = STRFTIME('%Y', DATE('now'))
 									--AND STRFTIME('%m', e.Date) <= STRFTIME('%m', DATE('now'))
 									AND STRFTIME('%m', e.Date) = month

@@ -73,6 +73,7 @@ namespace vue_expenses_api.Features.Expenses
                             WHERE 
                                 u.Email=@userEmailId 
                                 AND e.Archived = 0
+                                AND e.PaymentType = 0
                                 {yearCriteria}";
                 var expenses = await _dbConnection.QueryAsync<ExpenseDto>(
                     sql,
