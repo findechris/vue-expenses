@@ -6,8 +6,9 @@ namespace vue_expenses_api.Domain
 {
     public enum PaymentTypes
     {
-        Income,
-        Expense
+        Expense,
+        Income
+
     }
 
     public class Expense : ArchivableEntity

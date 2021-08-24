@@ -50,7 +50,7 @@ namespace vue_expenses_api.Features.Expenses
                 Map(m => m.PaymentType).Convert(row =>
                 {
                     var fieldVal = row.Row.GetField("CdtDbtInd");
-                    if (fieldVal == "CRDT")
+                    if (fieldVal == "DBIT")
                     {
                         return Domain.PaymentTypes.Expense;
                     }
