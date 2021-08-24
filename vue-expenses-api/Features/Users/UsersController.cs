@@ -29,6 +29,7 @@ namespace vue_expenses_api.Features.Users
         }
 
         [HttpPost("register")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<Unit> Register(
             [FromBody] Register.Command command)
         {

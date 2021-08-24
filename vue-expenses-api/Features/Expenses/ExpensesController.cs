@@ -21,17 +21,17 @@ namespace vue_expenses_api.Features.Expenses
             _mediator = mediator;
         }
 
-        [HttpGet]
-        public async Task<List<ExpenseDto>> Get()
+        [HttpGet("list/{offset}/{rowcount}/{sortBy}/{sortDesc}")]
+        public async Task<ExpenseListDto> Get(int offset, int rowcount, string sortBy, bool sortDesc)
         {
-            return await _mediator.Send(new ExpenseList.Query());
+            return await _mediator.Send(new ExpenseList.Query(null, offset, rowcount, sortBy, sortDesc));
         }
 
         [HttpGet]
-        [Route("getbyyear/{year}")]
-        public async Task<List<ExpenseDto>> GetByYear(int year)
+        [Route("getbyyear/{year}/{offset}/{rowcount}/{sortBy}/{sortDesc}")]
+        public async Task<ExpenseListDto> GetByYear(int year, int offset, int rowcount, string sortBy, bool sortDesc)
         {
-            return await _mediator.Send(new ExpenseList.Query(year));
+            return await _mediator.Send(new ExpenseList.Query(year, offset, rowcount, sortBy, sortDesc));
         }
 
         [HttpGet("{id}")]

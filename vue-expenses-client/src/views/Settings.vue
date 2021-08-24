@@ -93,7 +93,6 @@
                                     class="pa-2 mr-2 my-3"
                                     flat
                                     min-height="340px"
-                                    height="100%"
                                 >
                                     <ExpenseCategories />
                                 </v-card>
@@ -110,7 +109,6 @@
                                     class="pa-2 mr-2 my-3"
                                     flat
                                     min-height="340px"
-                                    height="100%"
                                 >
                                     <User />
                                 </v-card>

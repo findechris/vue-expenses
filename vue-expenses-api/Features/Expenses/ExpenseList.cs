@@ -14,18 +14,26 @@ namespace vue_expenses_api.Features.Expenses
 {
     public class ExpenseList
     {
-        public class Query : IRequest<List<ExpenseDto>>
+        public class Query : IRequest<ExpenseListDto>
         {
             public int? Year { get; }
+            public int? Offset { get; }
+            public int? Rowcount { get; }
+            public string SortBy { get; }
+            public bool? SortDesc { get; }
 
             public Query(
-                int? year = null)
+                int? year = null, int? offset = 0, int? rowcount = 10, string sortBy = "id", bool? sortDesc = true)
             {
                 Year = year;
+                Offset = offset;
+                Rowcount = rowcount;
+                SortBy = sortBy;
+                SortDesc = sortDesc;
             }
         }
 
-        public class QueryHandler : IRequestHandler<Query, List<ExpenseDto>>
+        public class QueryHandler : IRequestHandler<Query, ExpenseListDto>
         {
             private readonly IDbConnection _dbConnection;
             private readonly ExpensesContext _context;
@@ -43,15 +51,16 @@ namespace vue_expenses_api.Features.Expenses
             }
 
             //Implement Paging
-            public async Task<List<ExpenseDto>> Handle(
+            public async Task<ExpenseListDto> Handle(
                 Query message,
                 CancellationToken cancellationToken)
             {
+                var sorting = message.SortDesc.HasValue && message.SortDesc.Value ? "DESC" : "ASC";
                 var yearCriteria = message.Year.HasValue
                     ? $" AND STRFTIME('%Y', e.Date) = '{message.Year}'"
                     : string.Empty;
                 var sql = $@"SELECT 
-                                e.Id,
+                                e.Id as id,
                                 STRFTIME('%Y-%m-%d', e.Date) AS Date,
                                 STRFTIME('%m', e.Date) AS Month,
                                 ec.Name AS Category,
@@ -74,14 +83,35 @@ namespace vue_expenses_api.Features.Expenses
                                 u.Email=@userEmailId 
                                 AND e.Archived = 0
                                 AND e.PaymentType = 0
-                                {yearCriteria}";
-                var expenses = await _dbConnection.QueryAsync<ExpenseDto>(
+                                {yearCriteria}
+                            ORDER BY {message.SortBy} {sorting}
+                            LIMIT {message.Offset}, {message.Rowcount}
+                            ;
+                            
+                            SELECT COUNT(*)
+                            FROM 
+                                Expenses e
+                            INNER JOIN
+                                ExpenseCategories ec ON ec.Id = e.CategoryId AND ec.Archived = 0
+                            INNER JOIN
+                                ExpenseTypes et ON et.Id = e.TypeId AND et.Archived = 0
+                            INNER JOIN
+                                Users u ON u.Id = e.UserId
+                            WHERE 
+                                u.Email=@userEmailId 
+                                AND e.Archived = 0
+                                AND e.PaymentType = 0
+                                {yearCriteria}
+                            ";
+                var multi = await _dbConnection.QueryMultipleAsync(
                     sql,
                     new
                     {
                         userEmailId = _currentUser.EmailId
                     }
                 );
+                var expenses = multi.Read<ExpenseDto>();
+                var totalCount = multi.ReadFirst<int>();
                 var exList = expenses.ToList();
                 foreach (var expense in exList)
                 {
@@ -97,7 +127,7 @@ namespace vue_expenses_api.Features.Expenses
                         }).ToList();
                     }
                 }
-                return exList;
+                return new ExpenseListDto(exList, totalCount);
             }
         }
     }

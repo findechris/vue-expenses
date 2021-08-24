@@ -81,9 +81,9 @@
         </v-layout>
     </v-container>
 </template>
-<script>
+<script lang="ts">
 import Api from '@/services/api'
-import PieChart from '@/components/Charts/PieChart'
+import PieChart from './Charts/PieChart.vue'
 import forEach from 'lodash/forEach'
 import { mapState } from 'vuex'
 
@@ -137,7 +137,7 @@ export default {
     },
     computed: {
         ...mapState({
-            user: (state) => state.account.user
+            user: (state) => (state as any).account.user
         })
     },
     data: () => ({

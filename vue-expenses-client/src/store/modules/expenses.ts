@@ -15,21 +15,69 @@ import {
     UPDATE_EXPENSE,
     DELETE_EXPENSE,
     DELETE_EXPENSESOFTYPE,
-    DELETE_EXPENSESOFCATEGORY
+    DELETE_EXPENSESOFCATEGORY,
+    SET_EXPENSES_PAGINATION
 } from '@/store/_mutationtypes'
 import sumBy from 'lodash/sumBy'
 import groupBy from 'lodash/groupBy'
 import map from 'lodash/map'
 import orderBy from 'lodash/orderBy'
 
-const state = {
-    expenses: []
+export interface IExpenses {
+    id: number
+    date: string
+    categoryId?: number
+    category?: string
+    categoryBudget?: number
+    categoryColour?: string
+    typeId: number
+    type: string
+    value: number
+    comments: string
+}
+
+export interface IPagination {
+    sortDesc: boolean[]
+    page: number
+    itemsPerPage: number
+    sortBy: string[]
+    totalItems: number
+    rowsPerPageItems: number[]
+}
+
+export interface IExpensesState {
+    expenses: IExpenses[]
+    pagination: IPagination
+}
+
+const state: IExpensesState = {
+    expenses: [],
+    pagination: {
+        sortDesc: [true],
+        page: 1,
+        itemsPerPage: 10,
+        sortBy: ['date'],
+        totalItems: 10,
+        rowsPerPageItems: [1, 2, 4, 8, 16]
+    }
 }
 
 const actions = {
-    async [LOAD_EXPENSES]({ commit }) {
-        const response = await Api.get('/expenses')
-        const expenses = response.data
+    async [LOAD_EXPENSES]({ commit, getters }) {
+        const pagination = getters.pagination
+        const offset = (pagination.page - 1) * pagination.itemsPerPage
+        let sortBy = 'id'
+        let sortDesc = true
+        if (pagination.sortBy && pagination.sortBy.length > 0) {
+            sortBy = pagination.sortBy[0]
+            sortDesc = pagination.sortDesc[0]
+        }
+        const response = await Api.get(
+            `/expenses/list/${offset}/${pagination.itemsPerPage}/${sortBy}/${sortDesc}`
+        )
+        const expenses = response.data.items
+        pagination.totalItems = response.data.totalItems
+        commit(SET_EXPENSES_PAGINATION, pagination)
         commit(SET_EXPENSES, expenses)
     },
     async [CREATE_EXPENSE]({ commit, dispatch }, { expense }) {
@@ -92,13 +140,16 @@ const actions = {
 }
 
 const mutations = {
-    [SET_EXPENSES](state, expenses) {
+    [SET_EXPENSES_PAGINATION](state: IExpensesState, pagination: IPagination) {
+        state.pagination = pagination
+    },
+    [SET_EXPENSES](state: IExpensesState, expenses: IExpenses[]) {
         state.expenses = expenses
     },
-    [ADD_EXPENSE](state, expense) {
+    [ADD_EXPENSE](state: IExpensesState, expense: IExpenses) {
         state.expenses.push(expense)
     },
-    [UPDATE_EXPENSE](state, expense) {
+    [UPDATE_EXPENSE](state: IExpensesState, expense: IExpenses) {
         const expenseUpdated = state.expenses.find((ec) => ec.id == expense.id)
         expenseUpdated.date = expense.date
         expenseUpdated.value = expense.value
@@ -108,13 +159,13 @@ const mutations = {
         expenseUpdated.type = expense.type
         expenseUpdated.comments = expense.comments
     },
-    [DELETE_EXPENSE](state, id) {
+    [DELETE_EXPENSE](state: IExpensesState, id: number) {
         state.expenses = state.expenses.filter((ec) => ec.id != id)
     },
-    [DELETE_EXPENSESOFTYPE](state, typeId) {
+    [DELETE_EXPENSESOFTYPE](state: IExpensesState, typeId: number) {
         state.expenses = state.expenses.filter((ec) => ec.typeId != typeId)
     },
-    [DELETE_EXPENSESOFCATEGORY](state, categoryId) {
+    [DELETE_EXPENSESOFCATEGORY](state: IExpensesState, categoryId: number) {
         state.expenses = state.expenses.filter(
             (ec) => ec.categoryId != categoryId
         )
@@ -122,6 +173,9 @@ const mutations = {
 }
 
 const getters = {
+    pagination: (state) => {
+        return state.pagination
+    },
     overallSpent: (state, getters, rootState) => {
         const overallSpent = new Intl.NumberFormat(
             window.navigator.language

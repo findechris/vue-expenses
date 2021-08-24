@@ -13,10 +13,7 @@
                                     <v-text-field
                                         v-model="registerForm.email"
                                         placeholder="E-mail"
-                                        :rules="[
-                                            required('Email'),
-                                            email('Email')
-                                        ]"
+                                        :rules="[required('Email'), email()]"
                                         dense
                                     ></v-text-field>
                                     <v-text-field

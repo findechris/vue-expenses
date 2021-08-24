@@ -155,15 +155,16 @@
     </v-data-table>
 </template>
 
-<script>
+<script lang="ts">
 import { mapState, mapActions } from 'vuex'
+import { defineComponent } from '@vue/composition-api'
 import {
     CREATE_CATEGORY,
     EDIT_CATEGORY,
     REMOVE_CATEGORY
 } from '@/store/_actiontypes'
 
-export default {
+export default defineComponent({
     data: () => ({
         loading: false,
         dialog: false,
@@ -194,7 +195,7 @@ export default {
 
     computed: {
         ...mapState({
-            categories: (state) => state.expenseCategories.categories
+            categories: (state) => (state as any).expenseCategories.categories
         }),
         categoryFormTitle() {
             return this.editedCategory.id === 0
@@ -267,7 +268,7 @@ export default {
             }
         }
     }
-}
+})
 </script>
 
 <style></style>

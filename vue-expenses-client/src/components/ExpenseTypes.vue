@@ -94,13 +94,14 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import { defineComponent } from '@vue/composition-api'
 import {
     CREATE_EXPENSE_TYPE,
     EDIT_EXPENSE_TYPE,
     REMOVE_EXPENSE_TYPE
 } from '@/store/_actiontypes'
 
-export default {
+export default defineComponent({
     data: () => ({
         loading: false,
         dialog: false,
@@ -187,7 +188,7 @@ export default {
             }
         }
     }
-}
+})
 </script>
 
 <style></style>

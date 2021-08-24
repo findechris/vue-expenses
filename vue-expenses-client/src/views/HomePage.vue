@@ -37,7 +37,7 @@ export default {
         this.$store.dispatch(`expenseCategories/${LOAD_CATEGORIES}`)
         this.$store.dispatch(`statistics/${LOAD_CATEGORIES_BREAKDOWN}`)
         this.$store.dispatch(`statistics/${LOAD_EXPENSES_BREAKDOWN}`)
-        this.$store.dispatch(`expenses/${LOAD_EXPENSES}`)
+        // this.$store.dispatch(`expenses/${LOAD_EXPENSES}`)
         this.$store.dispatch(`account/${LOAD_CURRENCIES}`)
         this.$vuetify.theme.dark = this.theme === 'dark'
     },

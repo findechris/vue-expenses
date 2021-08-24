@@ -6,7 +6,10 @@
                     <v-data-table
                         :headers="headers"
                         :items="expenses"
-                        sort-by="date"
+                        :options.sync="pagination"
+                        footer-props.items-per-page-options="pagination.rowsPerPageItems"
+                        :server-items-length="pagination.totalItems"
+                        :loading="loading"
                         class="elevation-1"
                     >
                         <template v-slot:top>
@@ -81,8 +84,11 @@ import { mapState, mapActions } from 'vuex'
 import {
     CREATE_EXPENSE,
     EDIT_EXPENSE,
-    REMOVE_EXPENSE
+    REMOVE_EXPENSE,
+    LOAD_EXPENSES
 } from '@/store/_actiontypes'
+import { SET_EXPENSES_PAGINATION } from '@/store/_mutationtypes'
+import store from '../store'
 import ExpenseForm from '../components/ExpenseForm.vue'
 import { defineComponent } from '@vue/composition-api'
 
@@ -127,11 +133,28 @@ export default defineComponent({
 
         formTitle() {
             return this.editedExpense.id === 0 ? 'New Expense' : 'Edit Expense'
+        },
+        pagination: {
+            get: function () {
+                return store.state.expenses.pagination
+            },
+            set: function (value) {
+                console.log('hello', value)
+                store.commit(`expenses/${SET_EXPENSES_PAGINATION}`, value)
+            }
         }
     },
     watch: {
         dialog(val) {
             val || this.close()
+        },
+        pagination: {
+            async handler() {
+                this.loading = true
+                await this.$store.dispatch(`expenses/${LOAD_EXPENSES}`)
+                this.loading = false
+            },
+            deep: true
         }
     },
     methods: {

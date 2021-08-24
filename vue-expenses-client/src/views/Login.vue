@@ -5,19 +5,19 @@
                 <v-layout align-center justify-center>
                     <v-flex xs12 sm8 md4>
                         <v-card tile>
-                            <v-toolbar flat color="primary" dark>
-                                <v-toolbar-title>Login</v-toolbar-title>
-                            </v-toolbar>
-                            <v-card-text>
-                                <v-form ref="loginForm">
+                            <v-form
+                                ref="loginForm"
+                                @submit.prevent="handleLoginSubmit"
+                            >
+                                <v-toolbar flat color="primary" dark>
+                                    <v-toolbar-title>Login</v-toolbar-title>
+                                </v-toolbar>
+                                <v-card-text>
                                     <v-text-field
                                         v-model="loginForm.email"
                                         placeholder="E-mail"
                                         prepend-icon="email"
-                                        :rules="[
-                                            required('Email'),
-                                            email('Email')
-                                        ]"
+                                        :rules="[required('Email'), email()]"
                                         dense
                                     ></v-text-field>
                                     <v-text-field
@@ -38,26 +38,26 @@
                                         :rules="[required('Password')]"
                                         dense
                                     ></v-text-field>
-                                </v-form>
-                            </v-card-text>
-                            <v-card-actions>
-                                <v-btn
+                                </v-card-text>
+                                <v-card-actions>
+                                    <!--<v-btn
                                     small
                                     outlined
                                     class="primary--text"
                                     @click.native="handleRegisterClick()"
                                     >Register</v-btn
-                                >
-                                <v-spacer></v-spacer>
-                                <v-btn
-                                    small
-                                    outlined
-                                    class="primary--text"
-                                    @click="handleLoginSubmit"
-                                    :loading="loading"
-                                    >Login</v-btn
-                                >
-                            </v-card-actions>
+                                >-->
+                                    <v-spacer></v-spacer>
+                                    <v-btn
+                                        small
+                                        outlined
+                                        class="primary--text"
+                                        type="submit"
+                                        :loading="loading"
+                                        >Login</v-btn
+                                    >
+                                </v-card-actions>
+                            </v-form>
                         </v-card>
                     </v-flex>
                 </v-layout>
@@ -90,7 +90,7 @@ export default {
     },
     created() {
         //reset theme
-        this.$vuetify.theme.dark = 0
+        // this.$vuetify.theme.dark = 0
         // reset login status
         this.LOGOUT()
     },

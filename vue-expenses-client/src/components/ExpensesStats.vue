@@ -36,6 +36,7 @@
                                     sort-by="date"
                                     :items-per-page="5"
                                     loading-text="Loading... Please wait"
+                                    :loading="loading"
                                     dense
                                     :footer-props="{
                                         itemsPerPageOptions: [10]
@@ -102,18 +103,34 @@ export default {
             user: (state) => state.account.user
         })
     },
+    watch: {
+        options: {
+            handler() {
+                this.loadyearlydata()
+            },
+            deep: true
+        }
+    },
     methods: {
-        loaddata(year) {
-            this.loadyearlydata(year).then(() => {
-                this.loadcategoryStack(year)
-            })
+        async loaddata(year) {
+            await this.loadyearlydata(year)
+            this.loadcategoryStack(year)
         },
-        loadyearlydata(year) {
-            return Api.get(`/expenses/getbyyear/${this.selectedYear}`).then(
-                (response) => {
-                    this.yearlyExpenses = response.data
-                }
+        async loadyearlydata(year) {
+            // const { sortBy, sortDesc, page, itemsPerPage } = this.options
+            /* const offset = (page - 1) * itemsPerPage
+            let sortByNew = 'id'
+            let sortDescNew = true
+            if (sortBy && sortBy.length > 0) {
+                sortByNew = sortBy[0]
+                sortDescNew = sortDesc[0]
+            } */
+            const response = await Api.get(
+                `/expenses/getbyyear/${this.selectedYear}/0/-1/id/true`
             )
+            this.yearlyExpenses = response.data.items
+            // this.options.totalItems = response.data.totalCount
+            this.loading = false
         },
         loadcategoryStack(year) {
             let expenses = this.yearlyExpenses
@@ -181,6 +198,8 @@ export default {
         selectedYear: new Date().getFullYear(),
         yearlyExpenses: [],
         categoryStack: {},
+        loading: true,
+        options: {},
         headers: [
             { text: 'Category', value: 'category' },
             { text: 'Type', value: 'type' },
